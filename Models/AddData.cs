@@ -7,11 +7,6 @@ namespace WebAPI.Models
 {
     public class AddData
     {
-        class CreateDbData
-        {
-            static void Main(string[] args) { }
-        }
-
         static void Main(string[] args)
         {
                 using (var context = new TicketsDbContext())
