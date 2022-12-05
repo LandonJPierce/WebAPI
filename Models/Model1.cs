@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -7,12 +8,10 @@ namespace WebAPI.Models
 {
     public class User
     {
-        public int ID { get; set; }
+        public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Department { get; set; }
         public string Manager { get; set; }
-
-        public virtual ICollection<Employee> Employees { get; set; }
     }
 }
