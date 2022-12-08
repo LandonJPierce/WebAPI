@@ -6,26 +6,55 @@ using System.Net.Http;
 using System.Web.Http;
 using WebAPI.Models;
 using System.Data.Entity;
+using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 
 namespace WebAPI.Controllers
 {
     public class DefaultController : ApiController
     {
-
-        //Creating a method to return Json data
-        public HttpResponseMessage Get()
+        public ICollection<User> Get()
         {
-            List<User> employeeList = new List<User>();
-            using(EmployeeTickets db = new EmployeeTickets())
+            ICollection<User> userColl = new Collection<User>();
+            using (EmployeeTickets db = new EmployeeTickets())
             {
-                employeeList = db.Users.OrderBy(a => a.FirstName).ToList();
-                HttpResponseMessage response;
-                response = Request.CreateResponse(HttpStatusCode.OK, employeeList);
-                return response;
+                userColl = db.Users.ToList();
+                return userColl;
             }
         }       
+            static void Main(string[] args)
+            {
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri("http://localhost:44372/")
+                };
+                // Add an Accept header for JSON format.
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                // List all Names.
+                HttpResponseMessage response = client.GetAsync("api/Default").Result;  // Blocking call!
+                if (response.IsSuccessStatusCode)
+                {
+                    _ = response.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                }
+
+                {
+                    User p = new User { UserID = 1, FirstName = "Random", LastName = "Guy", Department = "sales", Manager = "Some Guy" };
+                    var createresponse = client.PostAsJsonAsync("api/createUser", p).Result;
+                    if (createresponse.IsSuccessStatusCode)
+                    {
+                        Console.Write("Success");
+                    }
+                    else
+                        Console.Write("Error");
+                }
+            }
+        }
+
     }
-}
 
 
 

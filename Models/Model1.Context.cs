@@ -16,7 +16,7 @@ namespace WebAPI.Models
     public partial class EmployeeTickets : DbContext
     {
         public EmployeeTickets()
-            : base("name=EmployeeTickets")
+            : base("name = EmployeeTickets")
         {
         }
         public DbSet<User> Users { get; set; }
